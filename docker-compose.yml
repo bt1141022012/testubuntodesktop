@@ -1,0 +1,26 @@
+services:
+  ubuntu-desktop:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: ubuntu_desktop_browser
+    security_opt:
+      - seccomp:unconfined # Necesario para compatibilidad completa de librerías dentro del contenedor
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/El_Salvador
+      - LANG=es_SV.UTF-8
+      - LANGUAGE=es_SV:es
+      - LC_ALL=es_SV.UTF-8
+      - SUBFOLDER=/ # Ruta base de la aplicación web
+      - TITLE=Ubuntu Desktop # Título de la pestaña en el navegador
+    volumes:
+      - ubuntu_config:/config # Almacenamiento persistente para tus archivos y configuraciones
+    ports:
+      - "3000:3000" # Puerto HTTP para acceder desde el navegador
+      - "3001:3001" # Puerto HTTPS (opcional)
+    shm_size: "2gb" # Aumenta la memoria compartida para evitar fallos en navegadores dentro del escritorio
+    restart: unless-stopped
+
+volumes:
+  ubuntu_config:
+    driver: local
